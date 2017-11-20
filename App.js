@@ -1,17 +1,29 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native'; 
 import { COLOR, ThemeProvider, Button } from 'react-native-material-ui';
+import Main from './Main.js';
+import { StackNavigator } from 'react-navigation';
+
+const HomeScreen = () => (
+  <Main />
+);
+
+const DetailsScreen = () => (
+  <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+    <Text>Details Screen</Text>
+  </View>
+);
+ 
+
+const SimpleApp = StackNavigator({
+  Home: { screen: HomeScreen }
+});
 
 export default class App extends React.Component {
   render() {
     return (
       <ThemeProvider uiTheme={uiTheme}>
-        <View style={styles.container}>
-        <Button raised primary text="Login"/>
-          <Text>Open up App.js to start working on your app!</Text>
-          <Text>Changes you make will automatically reload.</Text>
-          <Text>Shake your phone to open the developer menu.</Text>
-        </View>
+         <SimpleApp />
       </ThemeProvider>
     );
   }
