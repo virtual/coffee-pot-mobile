@@ -1,12 +1,19 @@
 import React from 'react';
-import { Button, StyleSheet, TouchableOpacity, Image, Text, TextInput } from 'react-native';
+import { StyleSheet, TouchableOpacity, Image, Text, TextInput } from 'react-native';
 import tabstyle from '../styles';
+import { COLOR, ThemeProvider, Button } from 'react-native-material-ui';
+import Container from '../Container'
 var axios = require('axios');
 
 export default class Login extends React.Component {
   static navigationOptions = {
     title: "Login",
     tabBarLabel: 'Login',
+    headerStyle: {
+        backgroundColor: COLOR.brown500,
+    },
+    headerTintColor: '#fff',
+    
     tabBarIcon: ({ tintColor }) => (
       <Image
       source={require('../images/notification-icon.png')}
@@ -60,35 +67,42 @@ export default class Login extends React.Component {
   render() {
     const { navigate } = this.props.navigation    
     return (
-      <Image source={require('../images/main-background.jpg')} style={styles.backgroundImage}> 
-      <Image source={require('../images/1.png')} style={styles.logo}/>
-        <Text style={styles.titles}>Username:</Text>
+      <Container>
+        <Text style={styles.logo}>Coffee Pot Pi logo</Text>
         <TextInput style={styles.inputText}
         onChangeText={(text) => this.updateUsername(text)}
+        placeholder="Email"        
         value={this.state.username}/>  
-        <Text style={styles.titles}>Password:</Text>
         <TextInput style={styles.inputText}
         onChangeText={(text) => this.updatePassword(text)}
         value={this.state.password}
         secureTextEntry={true}
+        placeholder="Password"
         />
-        <Button style={styles.loginButton} 
+        <Button raised primary 
+        style={styles.submitButton}
         title='Login'
+        text="Login"
         onPress={() => this.submitLogin(this.state.username, this.state.password)} />
-     </Image>
+     </Container>
     )
   }
 } 
 
 const styles = StyleSheet.create({
-  logo:{
-  },
+ 
   inputText:{
-    height: 40, 
-    width: 220,
-    borderColor: 'black',
+    height: 40,   
+    borderColor: COLOR.brown100,
     borderWidth: 1,
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    marginBottom: 8,
+    padding: 8
+  },
+  logo: {
+    textAlign: 'center',
+    fontSize: 20,
+    padding: 16
   },
   backgroundImage:{
     flex: 1,
