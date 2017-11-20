@@ -4,14 +4,12 @@ import { COLOR, ThemeProvider, Button, Toolbar } from 'react-native-material-ui'
 import { StackNavigator } from 'react-navigation';
 import Container from '../Container';
 
-
- 
 export default class Main extends Component {
   
   static navigationOptions = {
     
-    title: "Coffee Pot Pi",
-    tabBarLabel: 'Login',
+    title: "Loading...",
+    tabBarLabel: 'Loading',
     headerStyle: {
         backgroundColor: COLOR.brown500,
     },
@@ -32,27 +30,8 @@ export default class Main extends Component {
     return (
       <Container>
         
-        <Button raised primary
-          onPress={() => navigate('Login')}
-          title="Login.."
-          text="Log in"
-        /> 
-        <Button raised secondary
-        onPress={() => navigate('Loading')}
-        title="Loading"
-        text="Loading"
-      />
-        <Text>Revolutionize your coffee process
-
-</Text>
-        <Text>Get your piece of the Coffee Pot "Pi"
-
-1
-Request more coffee
-2
-Coffee is brewed
-3
-Drink fresh coffee without wasting extra</Text>
+        
+        <Text>Loading...</Text>
       </Container>
     );
   }

@@ -3,12 +3,14 @@ import { AppRegistry, StyleSheet, Text, View } from 'react-native';
 import { COLOR, ThemeProvider, Button } from 'react-native-material-ui';
 import Main from './screens/Main.js';
 import Login from './screens/Login.js';
+import Loading from './screens/Loading.js';
 import { StackNavigator } from 'react-navigation';
  
 
 const SimpleApp = StackNavigator({
   Main: { screen: Main },
-  Login: { screen: Login }
+  Login: { screen: Login },
+  Loading: { screen: Loading }
 });
  
 
@@ -30,7 +32,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-  },
+  }
 });
 
 // you can set your style right here, it'll be propagated to application

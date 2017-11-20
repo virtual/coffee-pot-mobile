@@ -114,7 +114,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(52, 52, 52, 0.0)'
   },
   loginButton:{
-    marginTop: 5,
-    backgroundColor: 'rgba(52, 52, 52, 0.0)',
+    marginTop: 5 
   }
 });
