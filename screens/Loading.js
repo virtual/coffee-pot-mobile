@@ -3,13 +3,14 @@ import { StyleSheet, Text, View, StatusBar } from 'react-native';
 import { COLOR, ThemeProvider, Button, Toolbar } from 'react-native-material-ui';
 import { StackNavigator } from 'react-navigation';
 import Container from '../Container';
+import CoffeePot from '../svgComponents/svg/Coffee-pot'
 
 export default class Main extends Component {
   
   static navigationOptions = {
     
-    title: "Loading...",
-    tabBarLabel: 'Loading',
+    title: "Now Brewing...",
+    tabBarLabel: 'Brew Status',
     headerStyle: {
         backgroundColor: COLOR.brown500,
     },
@@ -29,10 +30,28 @@ export default class Main extends Component {
     const { navigate } = this.props.navigation;    
     return (
       <Container>
-        
-        
-        <Text>Loading...</Text>
+         <View style={{flex:1, flexDirection:'column', justifyContent:'center'}}>
+            
+        <View style={styles.svgSm}>
+        <CoffeePot />
+        </View>
+        </View>
+        <Text style={styles.status}>0% complete</Text>
       </Container>
     );
   }
 }
+ 
+const styles = StyleSheet.create({
+  svgSm: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+  }, 
+  status: {
+    textAlign: 'center',
+    fontSize: 20
+  }
+  
+});
