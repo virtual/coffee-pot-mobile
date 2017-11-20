@@ -1,25 +1,17 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native'; 
+import { AppRegistry, StyleSheet, Text, View } from 'react-native'; 
 import { COLOR, ThemeProvider, Button } from 'react-native-material-ui';
-import Main from './Main.js';
+import Main from './screens/Main.js';
+import Login from './screens/Login.js';
 import { StackNavigator } from 'react-navigation';
-
-const HomeScreen = () => (
-  <Main />
-);
-
-const DetailsScreen = () => (
-  <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-    <Text>Details Screen</Text>
-  </View>
-);
  
 
 const SimpleApp = StackNavigator({
-  Home: { screen: HomeScreen }
+  Main: { screen: Main },
+  Login: { screen: Login }
 });
 
-export default class App extends React.Component {
+export default class App extends React.Component {  
   render() {
     return (
       <ThemeProvider uiTheme={uiTheme}>
@@ -49,4 +41,5 @@ const uiTheme = {
       },
   },
 };
- 
+
+AppRegistry.registerComponent('SimpleApp', () => SimpleApp);

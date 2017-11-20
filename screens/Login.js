@@ -5,7 +5,7 @@ var axios = require('axios');
 
 export default class Login extends React.Component {
   static navigationOptions = {
-    title: "Welcome!",
+    title: "Login",
     tabBarLabel: 'Login',
     tabBarIcon: ({ tintColor }) => (
       <Image
