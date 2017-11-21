@@ -13,7 +13,7 @@ export default class Main extends Component {
     title: "Coffee Pot Pi",
     tabBarLabel: 'Login',
     headerStyle: {
-        backgroundColor: COLOR.brown500,
+        backgroundColor: COLOR.teal800,
     },
     headerTintColor: '#fff',
     
@@ -42,6 +42,11 @@ export default class Main extends Component {
         title="Loading"
         text="Loading"
       />
+      <Button raised primary
+      onPress={() => navigate('Signup')}
+      title="Signup"
+      text="Signup"
+    />
       <Button raised secondary
         onPress={() => navigate('Coffee')}
         title="Coffee"

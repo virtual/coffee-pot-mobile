@@ -241,15 +241,24 @@ const S3_BUCKET = process.env.S3_BUCKET;
 });
 
 app.post('/signup', (req, res, next) => {
-  // console.log(req.body)
-  let query = `INSERT INTO users (firstname, lastname, email, password, image) values ('${req.body.firstName}', '${req.body.lastName}', '${req.body.email}', '${passwordHash.generate(req.body.password)}', '${req.body.image}') RETURNING id, firstname, lastname, email, id, image`  
-  pool.query(query, (err, user) => {
-    // console.log(query)
-    // console.log(user)
-    
-  if (err) throw err;
-    res.json(user.rows);
-  });    
+  console.log(req.body)
+  console.log("password: " + passwordHash.generate(req.body.password));
+  let checkEmail = `SELECT FROM users WHERE email = '${req.body.email}'`;
+  console.log(checkEmail)
+  pool.query(checkEmail, (err, result) => {
+    if (result.rowCount > 0) {
+      res.json({message: 'An account is already associated with that email address.'})
+    } else {
+      let query = `INSERT INTO users (firstname, lastname, email, password, image) values ('${req.body.firstName}', '${req.body.lastName}', '${req.body.email}', '${passwordHash.generate(req.body.password)}', '${req.body.image}') RETURNING id, firstname, lastname, email, id, image`  
+      pool.query(query, (err, user) => {
+        // console.log(query)
+        
+      if (err) throw err;
+        res.json(user.rows);
+      });    
+    }
+  })
+  
 });
 
 app.post('/logout', (req, res) => {

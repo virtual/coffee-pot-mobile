@@ -1,15 +1,17 @@
 import React from 'react';
 import { AppRegistry, StyleSheet, Text, View } from 'react-native'; 
 import { COLOR, ThemeProvider, Button } from 'react-native-material-ui';
-import Main from './screens/Main.js';
-import Login from './screens/Login.js';
-import Coffee from './screens/Coffee.js';
-import Loading from './screens/Loading.js';
+import Main from './screens/Main';
+import Login from './screens/Login';
+import Signup from './screens/Signup';
+import Coffee from './screens/Coffee';
+import Loading from './screens/Loading';
 import { StackNavigator } from 'react-navigation';
  
 
 const SimpleApp = StackNavigator({
   Main: { screen: Main },
+  Signup: { screen: Signup },
   Login: { screen: Login },
   Coffee: { screen: Coffee },
   Loading: { screen: Loading }
@@ -40,8 +42,8 @@ const styles = StyleSheet.create({
 // you can set your style right here, it'll be propagated to application
 const uiTheme = {
    palette: {
-        primaryColor: COLOR.brown500,
-        accentColor: COLOR.pink500,
+        primaryColor: COLOR.teal600,
+        accentColor: COLOR.teal800,
     },
   toolbar: {
       container: {

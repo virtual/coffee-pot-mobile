@@ -11,7 +11,7 @@ export default class Coffee extends React.Component {
     title: "Coffee",
     tabBarLabel: 'Coffee',
     headerStyle: {
-        backgroundColor: COLOR.brown500   
+        backgroundColor: COLOR.teal800   
     },
     headerTintColor: '#fff',
     

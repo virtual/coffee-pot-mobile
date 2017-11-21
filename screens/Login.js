@@ -12,7 +12,7 @@ export default class Login extends React.Component {
     title: "Login",
     tabBarLabel: 'Login',
     headerStyle: {
-        backgroundColor: COLOR.brown500,
+        backgroundColor: COLOR.teal800,
     },
     headerTintColor: '#fff',
     
@@ -38,7 +38,7 @@ export default class Login extends React.Component {
 
 
 
-  updateUsername(text){
+  updateEmail(text){
     this.setState({
       username: text
     })
@@ -65,6 +65,9 @@ export default class Login extends React.Component {
         });
         if (res.data.found) {
           navigate('Loading');
+          resolve(res.data)
+        } else {
+          reject(res.data);
         }
       }).catch(e => {
         console.log(e);
@@ -82,7 +85,7 @@ export default class Login extends React.Component {
       <Container>
         <Text style={styles.logo}>Coffee Pot Pi logo!</Text>
         <TextInput style={styles.inputText}
-        onChangeText={(text) => this.updateUsername(text)}
+        onChangeText={(text) => this.updateEmail(text)}
         placeholder="Email"        
         value={this.state.username}/>  
         <TextInput style={styles.inputText}

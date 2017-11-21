@@ -12,7 +12,7 @@ export default class Main extends Component {
     title: "Now Brewing...",
     tabBarLabel: 'Brew Status',
     headerStyle: {
-        backgroundColor: COLOR.brown500,
+        backgroundColor: COLOR.teal800,
     },
     headerTintColor: '#fff',
     
