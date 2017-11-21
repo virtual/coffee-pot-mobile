@@ -164,6 +164,7 @@ passport.deserializeUser((id, done) => {
                   users: theseUsers,
                   found: true, 
                   success: true, 
+                  message: 'Welcome ' + user.firstname,
                   id: user.id, 
                   totalCount: sum, 
                   userCupcount: userCupcount, 
@@ -263,5 +264,6 @@ app.post('/logout', (req, res) => {
 
 var port = process.env.PORT || 5000;
 server.listen(port, () => {
-  console.log('listening on port ' + port);
+  var host = server.address().address; host = (host === '::')? 'localhost':host;
+  console.log('listening on port ' + port + ' ' + host  );
 });    

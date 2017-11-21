@@ -49,16 +49,17 @@ export default class Login extends React.Component {
   }
 
   submitLogin(a, b) {
+    console.log('trying to login')
     return new Promise((resolve, reject)=>{
-      axios.post('http://localhost:5000/login', {
+      axios.post('http://192.168.1.106:5000/login', {
             username: a,
             password: b,
     }).then((res) => {
         console.log(res);
-          resolve(res.data);
-          this.setState({
-            currentUser: res.data
-          })
+        this.setState({
+          currentUser: res.data,
+          message: res.data.message
+        })
       }).catch(e => {
         console.log(e);
         console.log(e.message)
