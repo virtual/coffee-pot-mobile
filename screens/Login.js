@@ -64,7 +64,7 @@ export default class Login extends React.Component {
           message: res.data.message
         });
         if (res.data.found) {
-          navigate('Loading');
+          navigate('Main');
           resolve(res.data)
         } else {
           reject(res.data);
