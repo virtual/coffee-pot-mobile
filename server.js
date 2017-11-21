@@ -39,11 +39,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(expressSession({ secret: "moby" }));
 app.use(passport.initialize());
 app.use(passport.session());
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static('./client/build'));
-} else {
+// if (process.env.NODE_ENV === 'production') {
+//   app.use(express.static('./client/build'));
+// } else {
   app.use(express.static('public'));
-}
+// }
 
 // needs to be called username 
 passport.use(new LocalStrategy({email: 'username', password: 'password'},
@@ -257,9 +257,9 @@ app.post('/logout', (req, res) => {
   res.redirect('/');
 });
 
-app.get("/*", function(req, res) {
-  res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
-});
+// app.get("/*", function(req, res) {
+//   res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
+// });
 
 var port = process.env.PORT || 5000;
 server.listen(port, () => {

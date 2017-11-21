@@ -29,7 +29,7 @@ export default class Login extends React.Component {
       username: "",
       password: "",
       currentUser: {
-        firstName: ""
+        firstName: "hi"
       }
     }
   }
@@ -50,7 +50,7 @@ export default class Login extends React.Component {
 
   submitLogin(a, b) {
     return new Promise((resolve, reject)=>{
-      axios.post('/login', {
+      axios.post('http://localhost:5000/login', {
             username: a,
             password: b,
     }).then((res) => {
@@ -59,16 +59,23 @@ export default class Login extends React.Component {
           this.setState({
             currentUser: res.data
           })
+      }).catch(e => {
+        console.log(e);
+        console.log(e.message)
+        this.setState({
+          message: e.message
+        })
       });
     });
   }
 
 
   render() {
-    const { navigate } = this.props.navigation    
+    const { navigate } = this.props.navigation;
+ 
     return (
       <Container>
-        <Text style={styles.logo}>Coffee Pot Pi logo</Text>
+        <Text style={styles.logo}>Coffee Pot Pi logo!</Text>
         <TextInput style={styles.inputText}
         onChangeText={(text) => this.updateUsername(text)}
         placeholder="Email"        
@@ -84,13 +91,19 @@ export default class Login extends React.Component {
         title='Login'
         text="Login"
         onPress={() => this.submitLogin(this.state.username, this.state.password)} />
+        <Text style={styles.message}>{ this.state.message }</Text>
      </Container>
     )
   }
 } 
 
 const styles = StyleSheet.create({
- 
+ message: {
+   textAlign: 'center',
+   padding: 8,
+   marginTop: 8,
+   fontStyle: 'italic'
+ },
   inputText:{
     height: 40,   
     borderColor: COLOR.brown100,
