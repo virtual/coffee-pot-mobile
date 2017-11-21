@@ -3,6 +3,7 @@ import { AppRegistry, StyleSheet, Text, View } from 'react-native';
 import { COLOR, ThemeProvider, Button } from 'react-native-material-ui';
 import Main from './screens/Main.js';
 import Login from './screens/Login.js';
+import Coffee from './screens/Coffee.js';
 import Loading from './screens/Loading.js';
 import { StackNavigator } from 'react-navigation';
  
@@ -10,6 +11,7 @@ import { StackNavigator } from 'react-navigation';
 const SimpleApp = StackNavigator({
   Main: { screen: Main },
   Login: { screen: Login },
+  Coffee: { screen: Coffee },
   Loading: { screen: Loading }
 });
  

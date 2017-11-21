@@ -42,6 +42,11 @@ export default class Main extends Component {
         title="Loading"
         text="Loading"
       />
+      <Button raised secondary
+        onPress={() => navigate('Coffee')}
+        title="Coffee"
+        text="Coffee"
+      />
         <Text>Revolutionize your coffee process
 
 </Text>
