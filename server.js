@@ -177,7 +177,7 @@ passport.deserializeUser((id, done) => {
         }
       })
     } else {
-      res.json({ found: false, success: false, message: "Something went wrong!" })
+      res.json({ found: false, success: false, message: "Username and Password are incorrect." })
     }
   })(req, res, next);
   var email = req.body.email;

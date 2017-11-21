@@ -2,7 +2,9 @@ import React from 'react';
 import { StyleSheet, TouchableOpacity, Image, Text, TextInput } from 'react-native';
 import tabstyle from '../styles';
 import { COLOR, ThemeProvider, Button } from 'react-native-material-ui';
-import Container from '../Container'
+import Container from '../Container';
+
+import { StackNavigator } from 'react-navigation';
 var axios = require('axios');
 
 export default class Login extends React.Component {
@@ -49,6 +51,7 @@ export default class Login extends React.Component {
   }
 
   submitLogin(a, b) {
+    const { navigate } = this.props.navigation;    
     console.log('trying to login')
     return new Promise((resolve, reject)=>{
       axios.post('http://192.168.1.106:5000/login', {
@@ -59,7 +62,10 @@ export default class Login extends React.Component {
         this.setState({
           currentUser: res.data,
           message: res.data.message
-        })
+        });
+        if (res.data.found) {
+          navigate('Loading');
+        }
       }).catch(e => {
         console.log(e);
         console.log(e.message)
@@ -72,8 +78,6 @@ export default class Login extends React.Component {
 
 
   render() {
-    const { navigate } = this.props.navigation;
- 
     return (
       <Container>
         <Text style={styles.logo}>Coffee Pot Pi logo!</Text>
