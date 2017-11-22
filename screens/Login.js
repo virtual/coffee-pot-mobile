@@ -26,7 +26,7 @@ export default class Login extends React.Component {
 }
   constructor(){
     super()
-    this.submitLogin = this.submitLogin.bind(this);
+    this.handleLogin = this.handleLogin.bind(this);
     this.state = {
       username: "",
       password: "",
@@ -50,35 +50,18 @@ export default class Login extends React.Component {
     })
   }
 
-  submitLogin(a, b) {
+  handleLogin() {
+    console.log('handling!!')
     const { navigate } = this.props.navigation;    
-    console.log('trying to login')
-    return new Promise((resolve, reject)=>{
-      axios.post('http://192.168.0.22:5000/login', {
-            username: a,
-            password: b,
-    }).then((res) => {
-        console.log(res);
-        this.setState({
-          currentUser: res.data,
-          message: res.data.message
-        });
-        if (res.data.found) {
-          navigate('Main');
-          resolve(res.data)
-        } else {
-          reject(res.data);
-        }
-      }).catch(e => {
-        console.log(e);
-        console.log(e.message)
-        this.setState({
-          message: e.message
-        })
-      });
-    });
+    this.props.screenProps.store.submitLogin(this.state.username, this.state.password).then((returned)=>{
+      console.log(returned);
+      if (returned.found) {
+        navigate('Main');
+      }
+    })
   }
 
+  
 
   render() {
     return (
@@ -98,8 +81,8 @@ export default class Login extends React.Component {
         style={styles.submitButton}
         title='Login'
         text="Login"
-        onPress={() => this.submitLogin(this.state.username, this.state.password)} />
-        <Text style={styles.message}>{ this.state.message }</Text>
+        onPress={() => this.handleLogin()} />
+        <Text style={styles.message}>{ this.props.screenProps.store.message }</Text>
      </Container>
     )
   }
