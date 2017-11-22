@@ -134,12 +134,10 @@ constructor(){
             <Image source={require('../images/main-background.jpg')} style={styles.jumbotron}>
               <View style={{ flex: 1 }}>
                 <View style={styles.logo}>
-                  <Image style={styles.logoImg} source={require('../images/coffee.png')} resizeMode="contain" />
-                  
+                  <Image style={styles.logoImg} source={require('../images/logo-inverted.png')} resizeMode="contain" />
                 </View>
                 <View style={styles.footer}>
                   <View style={styles.buttonBottom} >
-
                     <Button raised primary
                       onPress={() => navigate('Signup')}
                       title="Signup"
