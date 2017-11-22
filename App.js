@@ -7,7 +7,8 @@ import Signup from './screens/Signup';
 import Coffee from './screens/Coffee';
 import Loading from './screens/Loading';
 import { StackNavigator } from 'react-navigation';
- 
+import UserStore from './stores/UserStore'
+
 
 const SimpleApp = StackNavigator({
   Main: { screen: Main },
@@ -21,9 +22,10 @@ const SimpleApp = StackNavigator({
 export default class App extends React.Component {  
   
   render() {
+    console.log(UserStore.user["0"].firstName);
     return (
       <ThemeProvider uiTheme={uiTheme}>
-         <SimpleApp />
+         <SimpleApp screenProps={{ store: UserStore }} />
       </ThemeProvider>
     );
   }

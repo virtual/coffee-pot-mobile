@@ -54,7 +54,7 @@ export default class Login extends React.Component {
     const { navigate } = this.props.navigation;    
     console.log('trying to login')
     return new Promise((resolve, reject)=>{
-      axios.post('http://192.168.1.106:5000/login', {
+      axios.post('http://192.168.0.22:5000/login', {
             username: a,
             password: b,
     }).then((res) => {
@@ -83,7 +83,7 @@ export default class Login extends React.Component {
   render() {
     return (
       <Container>
-        <Text style={styles.logo}>Coffee Pot Pi logo!</Text>
+        <Text style={styles.logo}>Login with your email</Text>
         <TextInput style={styles.inputText}
         onChangeText={(text) => this.updateEmail(text)}
         placeholder="Email"        

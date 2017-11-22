@@ -104,6 +104,8 @@ constructor(){
 
   render() {
     const currentDate = new Date();
+    console.log("Main") 
+    console.log(this.props); 
     const { navigate } = this.props.navigation;    
     
     const year = (currentDate.getMonth() === 11 && currentDate.getDate() > 23) ? currentDate.getFullYear() + 1 : currentDate.getFullYear();
@@ -133,6 +135,7 @@ constructor(){
               <View style={{ flex: 1 }}>
                 <View style={styles.logo}>
                   <Image style={styles.logoImg} source={require('../images/coffee.png')} resizeMode="contain" />
+                  
                 </View>
                 <View style={styles.footer}>
                   <View style={styles.buttonBottom} >
@@ -151,6 +154,13 @@ constructor(){
                       text="Login"
                     />
                   </View>
+                  <View>
+                  <Text style={styles.debug}>
+                  STORE VAL: {this.props.screenProps.store.user[0].firstName} / / 
+
+                  Debug with json.stringify  :D
+                  </Text>
+                  </View>
                 </View>
               </View>
               <Text style={{ color: '#fff' }}>Solving - the problem of how much coffee to make</Text>
@@ -165,7 +175,7 @@ constructor(){
 }
 
 const styles = StyleSheet.create({
-
+debug: { backgroundColor: '#ccc', padding: 3},
   container: {
     flex: 1,
     backgroundColor: '#F5FCFF', 

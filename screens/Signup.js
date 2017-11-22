@@ -96,7 +96,7 @@ export default class Signup extends React.Component {
 
   submitSignup(signupObj) {
     return new Promise((resolve, reject) => {
-      axios.post('http://192.168.1.106:5000/signup', {
+      axios.post('http://192.168.0.22:5000/signup', {
         firstName: signupObj.firstName,
         lastName: signupObj.lastName,
         email: signupObj.email,
