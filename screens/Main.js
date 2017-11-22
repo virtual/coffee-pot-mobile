@@ -144,7 +144,7 @@ constructor(){
                   </View>
                   <View>
                   <Text style={styles.debug}>
-                  STORE VAL: {this.props.screenProps.store.user[0].firstName} / / 
+                  STORE VAL: {this.props.screenProps.store.user.firstName} / / 
 
                   Debug with json.stringify  :D
                   </Text>

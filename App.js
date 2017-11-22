@@ -17,11 +17,10 @@ const SimpleApp = StackNavigator({
   Loading: { screen: Loading }
 });
  
-
 export default class App extends React.Component {  
   
   render() {
-    console.log(UserStore.user["0"].firstName);
+    console.log(UserStore.user.firstName);
     return (
       <ThemeProvider uiTheme={uiTheme}>
          <SimpleApp screenProps={{ store: UserStore }} />

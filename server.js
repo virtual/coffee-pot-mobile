@@ -132,6 +132,7 @@ passport.deserializeUser((id, done) => {
   });
 
   app.post('/login', function (req, res, next) {
+    console.log(req.body)
   passport.authenticate('local', function (err, user) {
     if (err) {
       res.json({ found: false, success: false, err: true, message: err });
