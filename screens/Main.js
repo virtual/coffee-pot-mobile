@@ -127,36 +127,37 @@ constructor(){
         </View>
       )} else {
       return(
-        <View style={styles.container}>
           <View style={styles.contentContainer}>
 
             <Image source={require('../images/main-background.jpg')} style={styles.jumbotron}>
+              <View style={{ flex: 1 }}>
+                <View style={styles.logo}>
+                  <Image style={styles.logoImg} source={require('../images/coffee.png')} resizeMode="contain" />
+                </View>
+                <View style={styles.footer}>
+                  <View style={styles.buttonBottom} >
 
-              <Text style={styles.jumbotronTextH1}>Coffee Pot Pi</Text>
-              <Text style={{ color: '#fff' }}>Solving the problem of how much coffee to make</Text>
-              
+                    <Button raised primary
+                      onPress={() => navigate('Signup')}
+                      title="Signup"
+                      text="Signup"
+                    />
+                  </View>
+                  <View style={styles.buttonBottom} >
+
+                    <Button raised secondary
+                      onPress={() => navigate('Login')}
+                      title="Login"
+                      text="Login"
+                    />
+                  </View>
+                </View>
+              </View>
+              <Text style={{ color: '#fff' }}>Solving - the problem of how much coffee to make</Text>
             </Image>
 
-           
-          </View>
-          <View style={styles.footer}>
-          <View style={styles.buttonBottom} >
-          
-          <Button raised primary
-                onPress={() => navigate('Signup')}
-                title="Signup"
-                text="Signup"
-              />
-              </View>
-          <View style={styles.buttonBottom} >
-              
-              <Button raised secondary
-                onPress={() => navigate('Login')}
-                title="Login"
-                text="Login"
-              />
-              </View>
-            </View>
+
+
         </View>
       )
     }
@@ -167,7 +168,10 @@ const styles = StyleSheet.create({
 
   container: {
     flex: 1,
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#F5FCFF', 
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+
 },
 titleWrapper: {
 
@@ -176,18 +180,26 @@ inputWrapper: {
 
 },
 contentContainer: {
-    flex: 1 // pushes the footer to the end of the screen
+    flex: 1, // pushes the footer to the end of the screen
+    // height: 300,
+    // borderColor: 'blue',
+    // borderWidth: 3
+
 },
 footer: {
-    height: 100,
-    padding: 24
+    //height: 100,
+    padding: 24,
+    flex: 1,
+    //height: 300,
+    // borderColor: 'red',
+    // borderWidth: 3
 }
 ,
   buttonBottom: {
     paddingBottom: 16
   }, 
 jumbotron: {
-  backgroundColor: "#333",
+  // backgroundColor: "#333",
   //backgroundImage: "url(https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1050&q=60&ixid=dW5zcGxhc2guY29tOzs7Ozs%3D)", 
   width:'100%' ,
   padding: 10
@@ -211,10 +223,12 @@ inputText:{
   marginBottom: 8,
   padding: 8
 },
+logoImg: {
+  flex: 1, resizeMode: "stretch", width: null, height: null
+},
 logo: {
-  textAlign: 'center',
-  fontSize: 20,
-  padding: 16
+  // backgroundColor:'#ccc',
+  flexDirection: "row", flex: 1
 },
 backgroundImage:{
   flex: 1,
