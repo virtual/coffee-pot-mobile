@@ -6,38 +6,14 @@ import Container from '../Container';
 import CoffeePot from '../svgComponents/svg/Coffee-pot'
 
 export default class Main extends Component {
-  
-  static navigationOptions = {
-    
-    title: "Now Brewing...",
-    tabBarLabel: 'Brew Status',
-    headerStyle: {
-        backgroundColor: COLOR.teal800,
-    },
-    headerTintColor: '#fff',
-    
-    tabBarIcon: ({ tintColor }) => (
-      <Image
-      source={require('../images/notification-icon.png')}
-      style={[tabstyle.icon, { tintColor: tintColor }]}
- 
-    />
-  ),
-  
-}
-
   render() {
-    const { navigate } = this.props.navigation;    
     return (
-      <Container>
          <View style={{flex:1, flexDirection:'column', justifyContent:'center'}}>
-            
-        <View style={styles.svgSm}>
-        <CoffeePot />
+          <View style={styles.svgSm}>
+          <CoffeePot fillColor="#fff" />
+          </View>
+          <Text style={styles.status}>0% complete</Text>
         </View>
-        </View>
-        <Text style={styles.status}>0% complete</Text>
-      </Container>
     );
   }
 }
@@ -51,7 +27,8 @@ const styles = StyleSheet.create({
   }, 
   status: {
     textAlign: 'center',
-    fontSize: 20
+    fontSize: 20, 
+    flex: 1,
+    color: '#fff'
   }
-  
 });

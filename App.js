@@ -14,7 +14,6 @@ const SimpleApp = StackNavigator({
   Main: { screen: Main },
   Signup: { screen: Signup },
   Login: { screen: Login },
-  Coffee: { screen: Coffee },
   Loading: { screen: Loading }
 });
  

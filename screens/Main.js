@@ -3,13 +3,11 @@ import { StyleSheet, Text, View, StatusBar, Image } from 'react-native';
 import { COLOR, ThemeProvider, Button, Toolbar } from 'react-native-material-ui';
 import { StackNavigator } from 'react-navigation';
 import Container from '../Container';
+import Loading from './Loading';
 var axios = require('axios');
 
- 
 export default class Main extends Component {
-  
   static navigationOptions = {
-    
     title: "Coffee Pot Pi",
     tabBarLabel: 'Login',
     headerStyle: {
@@ -21,13 +19,9 @@ export default class Main extends Component {
       <Image
       source={require('../images/notification-icon.png')}
       style={[tabstyle.icon, { tintColor: tintColor }]}
- 
     />
-  ),
-  
+  )
 }
-
-  
 
 constructor(){
   super()
@@ -51,7 +45,6 @@ constructor(){
   endBrew(){
     // console.log('ending brew')
     this.socket.emit('/endBrew');
-    
     this.setState({
       clock: false
     })
@@ -75,8 +68,6 @@ constructor(){
       this.socket = openSocket(socketUrl)
       this.socket.emit('coffeeConnect', res)
       this.socket.on('postedCup', (data) => {
-        // console.log("postedCup+++++")
-        // console.log(this.props.userStore);
         let sample = data;
         if (sample) {
           Array.prototype.sum = function (prop) {
@@ -121,11 +112,10 @@ constructor(){
       </View>
     )} else if (this.props.user && this.state.clock == true) {
       return (
-        <View>
-          <Text>Calls LOADING</Text>
-          <View className='sr-only'>
-          <Text> Calls COUNTDOWN</Text>
-         </View>
+        <View style={styles.contentContainer}>
+            <Image source={require('../images/main-background.jpg')} style={styles.jumbotron}>
+          <Loading />
+          </Image>
         </View>
       )} else {
       return(
@@ -173,81 +163,62 @@ constructor(){
 }
 
 const styles = StyleSheet.create({
-debug: { backgroundColor: '#ccc', padding: 3},
+  debug: { backgroundColor: '#ccc', padding: 3 },
   container: {
     flex: 1,
-    backgroundColor: '#F5FCFF', 
+    //backgroundColor: '#F5FCFF',
     flexDirection: 'column',
     justifyContent: 'space-between',
-
-},
-titleWrapper: {
-
-},
-inputWrapper: {
-
-},
-contentContainer: {
+  },
+  contentContainer: {
     flex: 1, // pushes the footer to the end of the screen
-    // height: 300,
-    // borderColor: 'blue',
-    // borderWidth: 3
-
-},
-footer: {
-    //height: 100,
+  },
+  footer: {
     padding: 24,
     flex: 1,
-    //height: 300,
-    // borderColor: 'red',
-    // borderWidth: 3
-}
-,
+  }
+  ,
   buttonBottom: {
     paddingBottom: 16
-  }, 
-jumbotron: {
-  // backgroundColor: "#333",
-  //backgroundImage: "url(https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1050&q=60&ixid=dW5zcGxhc2guY29tOzs7Ozs%3D)", 
-  width:'100%' ,
-  padding: 10
-},
-jumbotronText: {
-  // background: 'linear-gradient(to right, rgba(154, 132, 120, .5), rgba(30, 19, 12, .5))',  
-  width: '100%'
-},
-jumbotronTextH1: {fontSize: 24, color: "#fff"},
-message: {
- textAlign: 'center',
- padding: 8,
- marginTop: 8,
- fontStyle: 'italic'
-},
-inputText:{
-  height: 40,   
-  borderColor: COLOR.brown100,
-  borderWidth: 1,
-  backgroundColor: 'white',
-  marginBottom: 8,
-  padding: 8
-},
-logoImg: {
-  flex: 1, resizeMode: "stretch", width: null, height: null
-},
-logo: {
-  // backgroundColor:'#ccc',
-  flexDirection: "row", flex: 1
-},
-backgroundImage:{
-  flex: 1,
-  resizeMode: 'cover',
-  justifyContent: 'center',
-  alignItems: 'center'
-},
-titles:{
-  backgroundColor: 'rgba(52, 52, 52, 0.0)'
-},
-loginButton:{
-  marginTop: 5 
-}
+  },
+  jumbotron: {
+    width: '100%',
+    padding: 10
+  },
+  jumbotronText: {
+    width: '100%'
+  },
+  jumbotronTextH1: { fontSize: 24, color: "#fff" },
+  message: {
+    textAlign: 'center',
+    padding: 8,
+    marginTop: 8,
+    fontStyle: 'italic'
+  },
+  inputText: {
+    height: 40,
+    borderColor: COLOR.brown100,
+    borderWidth: 1,
+    backgroundColor: 'white',
+    marginBottom: 8,
+    padding: 8
+  },
+  logoImg: {
+    flex: 1, resizeMode: "stretch", width: null, height: null
+  },
+  logo: {
+    flexDirection: "row", flex: 1
+  },
+  backgroundImage: {
+    flex: 1,
+    resizeMode: 'cover',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  titles: {
+    backgroundColor: 'rgba(52, 52, 52, 0.0)'
+  },
+  loginButton: {
+    marginTop: 5
+  }
 });
