@@ -54,7 +54,7 @@ export default class Login extends React.Component {
     const { navigate } = this.props.navigation;    
     this.props.screenProps.store.submitLogin(this.state.username, this.state.password).then((returned)=>{
       if (returned.found) {
-        navigate('Main');
+        navigate('Coffee');
       }
     })
   }
