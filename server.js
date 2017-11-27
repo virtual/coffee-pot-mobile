@@ -132,7 +132,6 @@ passport.deserializeUser((id, done) => {
   });
 
   app.post('/login', function (req, res, next) {
-    console.log(req.body)
   passport.authenticate('local', function (err, user) {
     if (err) {
       res.json({ found: false, success: false, err: true, message: err });
@@ -187,9 +186,11 @@ passport.deserializeUser((id, done) => {
 
 app.post('/socketUrl', (req, res)=>{
   if (process.env.PORT){
+    console.log('ooonnneee')
     res.json('https://coffee-pot-pi.herokuapp.com:');
   } else {
-    res.json('http://localhost:5000')
+    console.log('orrr ttttwwwooo')
+    res.json('192.168.1.14:5000')
   }
 });
 

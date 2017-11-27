@@ -4,6 +4,7 @@ import { COLOR, ThemeProvider, Button, Toolbar } from 'react-native-material-ui'
 import { StackNavigator } from 'react-navigation';
 import Container from '../Container';
 import Loading from './Loading';
+import SocketIOClient from 'socket.io-client';
 var axios = require('axios');
 
 export default class Main extends Component {
@@ -51,11 +52,14 @@ constructor(){
   }
 
   addCup(){
-    if (this.props.user.userCupcount <= 11) {
-    this.props.user.userCupcount = this.props.user.userCupcount + 1;
+    console.log('addddd cccuuuppppp')
+    console.log(this.props.screenProps.store.user.userCupcount); 
+    let thisCount = this.props.screenProps.store.user.userCupcount;
+    if (thisCount <= 11) {
+    thisCount = thisCount + 1;
     this.socket.emit('/postcup', {
-      cupcount: this.props.user.userCupcount,
-      userid: this.props.user.id
+      cupcount: thisCount,
+      userid: this.props.screenProps.store.user.id
       })
     } else {
       alert('Coffee pot at capacity!')
@@ -63,9 +67,11 @@ constructor(){
   } 
 
   componentDidMount(){
-    axios.post('http://192.168.1.106:5000/socketUrl').then((res) => {
+    axios.post('http://192.168.1.14:5000/socketUrl').then((res) => {
+      console.log(res.data)
+      console.log('^^^ DID MOUNT)')
       var socketUrl = res.data;
-      this.socket = openSocket(socketUrl)
+      this.socket = SocketIOClient(socketUrl)
       this.socket.emit('coffeeConnect', res)
       this.socket.on('postedCup', (data) => {
         let sample = data;
@@ -94,23 +100,33 @@ constructor(){
   }
 
   render() {
-    const currentDate = new Date();
-    console.log("Main") 
-    console.log(this.props); 
+    let user = this.props.screenProps.store.user
     const { navigate } = this.props.navigation;    
-    
-    const year = (currentDate.getMonth() === 11 && currentDate.getDate() > 23) ? currentDate.getFullYear() + 1 : currentDate.getFullYear();
-    if (this.props.user && this.state.clock == false) {
-      // console.log('wahoo')
+        if (this.props.screenProps.store.user.firstName && this.state.clock == false) {
     return (
-      <View>
-        <Button onClick={this.addCup}>Add a cup!
-        </Button>
-        <Text>All People who want coffee: calls USERS</Text>
-        
-        <Button onClick={this.startBrew}>Start Brew</Button>
-      </View>
-    )} else if (this.props.user && this.state.clock == true) {
+      <View style={styles.contentContainer}>
+            <Image source={require('../images/main-background.jpg')} style={styles.jumbotron}>
+              <View style={{ flex: 1 }}>
+                <View style={styles.footer}>
+                  <View style={styles.buttonTop} >
+                    <Button raised primary
+                      onPress={this.addCup}
+                      title="Add Cup"
+                      text="Add Cup"
+                    />
+                  </View>
+                  <View style={styles.buttonBottom} >
+                    <Button raised secondary
+                      onPress={this.startBrew}
+                      title="Start Brew"
+                      text="Start Brew"
+                    />
+                  </View>
+                </View>
+              </View>
+            </Image>
+        </View>
+    )} else if (this.props.screenProps.store.user.firstName && this.state.clock == true) {
       return (
         <View style={styles.contentContainer}>
             <Image source={require('../images/main-background.jpg')} style={styles.jumbotron}>
@@ -135,7 +151,6 @@ constructor(){
                     />
                   </View>
                   <View style={styles.buttonBottom} >
-
                     <Button raised secondary
                       onPress={() => navigate('Login')}
                       title="Login"
@@ -153,9 +168,6 @@ constructor(){
               </View>
               <Text style={{ color: '#fff' }}>Solving - the problem of how much coffee to make</Text>
             </Image>
-
-
-
         </View>
       )
     }
@@ -180,6 +192,10 @@ const styles = StyleSheet.create({
   ,
   buttonBottom: {
     paddingBottom: 16
+  },
+  buttonTop: {
+    paddingTop: 16,
+    paddingBottom: 320
   },
   jumbotron: {
     width: '100%',

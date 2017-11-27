@@ -5,22 +5,19 @@ let index = 0
 
 class ObservableUserStore {
   @observable user = {
-    firstName: 'mew',
+    firstName: null,
   }
   @observable message = 'here';
  
 
   @observable submitLogin(a, b) {
-    console.log('trying to login')
     return new Promise((resolve, reject)=>{
-      axios.post('http://192.168.0.22:5000/login', {
+      axios.post('http://192.168.1.14:5000/login', {
             username: a,
             password: b,
     }).then((res) => {
-        console.log(res);
-          this.user.firstName = res.data.firstName;
-          this.message = res.data.message;
-
+      console.log(res.data)
+          this.user = res.data
         if (res.data.found) {
           resolve(res.data)
         } else {
