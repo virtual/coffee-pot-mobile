@@ -58,16 +58,9 @@ constructor(){
                       text="Login"
                     />
                   </View>
-                  <View>
-                  <Text style={styles.debug}>
-                  STORE VAL: {this.props.screenProps.store.user.firstName} / / 
-
-                  Debug with json.stringify  :D
-                  </Text>
-                  </View>
                 </View>
               </View>
-              <Text style={{ color: '#fff' }}>Solving - the problem of how much coffee to make</Text>
+              {/* <Text style={{ color: '#fff' }}>Solving - the problem of how much coffee to make</Text> */}
             </Image>
         </View>
       )

@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity, Image, Text, TextInput, View, StatusBar } from 'react-native';
 import tabstyle from '../styles';
-import { Avatar, COLOR, ThemeProvider, Button } from 'react-native-material-ui';
+import { Subheader, Divider, COLOR, ThemeProvider, Button } from 'react-native-material-ui';
 import Container from '../Container';
 import { StackNavigator } from 'react-navigation';
 var axios = require('axios');
@@ -23,20 +23,36 @@ export default class Chipper extends React.Component {
       />
     )
   }
-  constructor() {
+  constructor(){
     super()
+    this.arrayBlaster = this.arrayBlaster.bind(this)
+  }
+
+  arrayBlaster(data) {
+    if (data) {
+       return (
+          <View style={styles.avatarRow}>
+          <Text>{data.firstname}: </Text>
+          <Text>{data.cupcount}</Text>
+          </View>
+        )
+    } else {
+      return null
+    }
   }
 
 
 
   render() {
-    console.log(this.props.info.users[0].image)
-    let fuckingStupidUrl = this.props.info.users[0].image
-    console.log('chipper props')
+    console.log(this.props.info)
+    console.log('skjlkjlksdf')
+    let masterBlaster = this.props.info.users
     return (
-      <View style={styles.avatarContainer}>
-        <Avatar image={<Image source={{uri: fuckingStupidUrl }}
-        />} />
+      <View style={styles.avatarColumn}>
+        {masterBlaster.map(this.arrayBlaster, this)}
+      <View style={styles.avatarRow}>
+        <Text>Total: </Text><Text>{this.props.info.totalCount}</Text>
+      </View>
       </View>
 
     )
@@ -44,10 +60,16 @@ export default class Chipper extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  avatarContainer: {
-    flexDirection: 'row',
+  avatarColumn: {
+    flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'space-between',
+    paddingHorizontal: 16
+  },
+  avatarRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     paddingHorizontal: 16
   },
   message: {

@@ -57,6 +57,7 @@ export default class Coffee extends React.Component {
       console.log(thisCount)
       console.log('thisCount')
       if (thisCount <= 11) {
+        console.log('blerrrstterrrrff')
       thisCount = thisCount + 1;
       this.socket.emit('/postcup', {
         cupcount: thisCount,
@@ -73,6 +74,7 @@ export default class Coffee extends React.Component {
         this.socket = SocketIOClient(socketUrl)
         this.socket.emit('coffeeConnect', res)
         this.socket.on('postedCup', (data) => {
+          console.log('fuck fuck fuck fuck fuk')
           let sample = data;
           if (sample) {
             Array.prototype.sum = function (prop) {
@@ -83,14 +85,27 @@ export default class Coffee extends React.Component {
               return total
             }
             let totalCupcount = sample.sum(`cupcount`);
+            console.log(totalCupcount)
+            console.log('shit fuck damn')
+            console.log(this.props.screenProps.store.user.totalCount)
+            console.log('what a lovely string')
             let storeCount = this.props.screenProps.store.user.totalCount;
-            if (storeCount <= 12) {
+            console.log(storeCount)
+            if (storeCount == null) {
+              storeCount = 0;
+              console.log('iffer')
+              console.log(storeCount)
+            } else if (storeCount <= 12) {
             storeCount = totalCupcount;
+            console.log('else iffer')
+            console.log(storeCount)
             } else {
               storeCount = 12;
               alert('Coffee pot at capacity!');
+              console.log('elser')
+              console.log(storeCount)
             }
-            this.props.screenProps.store.user = data;
+      //      this.props.screenProps.store.user = data;
           } else {
             this.props.screenProps.store.user = [];
           }

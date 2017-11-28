@@ -86,7 +86,7 @@ passport.deserializeUser((id, done) => {
       let query = `SELECT users.firstname, users.image, history.cupcount, users.id, history.status FROM users INNER JOIN history ON users.id = history.userid WHERE history.status = 0`;
       pool.query(query, (err, rows) => {
         data = rows.rows;
-        console.log(data)
+        console.log('coffee emitter')
         ioServer.in(rows).emit('postedCup', data);
       })
     }
@@ -96,6 +96,7 @@ passport.deserializeUser((id, done) => {
     });
 
     client.on('/postcup', (data) => {
+      console.log('aye aye cap"n')
       let checkUserCt = `SELECT * FROM history WHERE userid = ${data.userid} AND status = 0`;
       pool.query(checkUserCt, (err, rows)=>{
         // if user in current brew state

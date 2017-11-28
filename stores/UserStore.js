@@ -18,7 +18,6 @@ class ObservableUserStore {
     }).then((res) => {
           this.user = res.data
         if (res.data.found) {
-          console.log(res.data)
           resolve(res.data)
         } else {
           reject(res.data);
