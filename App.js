@@ -1,6 +1,7 @@
 import React from 'react';
 import { AppRegistry, StyleSheet, Text, View } from 'react-native'; 
 import { COLOR, ThemeProvider, Button } from 'react-native-material-ui';
+import { Provider } from 'mobx-react/native';
 import Main from './screens/Main';
 import Login from './screens/Login';
 import Signup from './screens/Signup';
@@ -24,9 +25,11 @@ export default class App extends React.Component {
   
   render() {
     return (
-      <ThemeProvider uiTheme={uiTheme}>
-         <SimpleApp screenProps={{ store: UserStore }} />
-      </ThemeProvider>
+      <Provider store={UserStore}>
+        <ThemeProvider uiTheme={uiTheme} store={{store: UserStore}}>
+          <SimpleApp screenProps={{ store: UserStore }} />
+        </ThemeProvider>
+      </Provider>
     );
   }
 }

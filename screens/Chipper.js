@@ -2,10 +2,12 @@ import React from 'react';
 import { StyleSheet, TouchableOpacity, Image, Text, TextInput, View, StatusBar } from 'react-native';
 import tabstyle from '../styles';
 import { Subheader, Divider, COLOR, ThemeProvider, Button } from 'react-native-material-ui';
+import {inject, observer} from "mobx-react/native";
 import Container from '../Container';
 import { StackNavigator } from 'react-navigation';
 var axios = require('axios');
 
+@inject('store') @observer
 export default class Chipper extends React.Component {
   static navigationOptions = {
     title: "Chipper",
@@ -28,10 +30,10 @@ export default class Chipper extends React.Component {
     this.arrayBlaster = this.arrayBlaster.bind(this)
   }
 
-  arrayBlaster(data) {
+  arrayBlaster(data, i) {
     if (data) {
        return (
-          <View style={styles.avatarRow}>
+          <View style={styles.avatarRow} key={i}>
           <Text>{data.firstname}: </Text>
           <Text>{data.cupcount}</Text>
           </View>
@@ -44,14 +46,16 @@ export default class Chipper extends React.Component {
 
 
   render() {
-    console.log(this.props.info)
-    console.log('skjlkjlksdf')
-    let masterBlaster = this.props.info.users
+    let nullifier = this.props.store.user.totalCount
+    if (!this.props.store.user.totalCount) {
+      nullifier = 0
+    }
+    let masterBlaster = this.props.store.user.users;
     return (
       <View style={styles.avatarColumn}>
         {masterBlaster.map(this.arrayBlaster, this)}
       <View style={styles.avatarRow}>
-        <Text>Total: </Text><Text>{this.props.info.totalCount}</Text>
+        <Text>Total: </Text><Text>{nullifier}</Text>
       </View>
       </View>
 

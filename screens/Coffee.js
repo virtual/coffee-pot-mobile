@@ -2,12 +2,13 @@ import React from 'react';
 import { StyleSheet, TouchableOpacity, Image, Text, TextInput, View, StatusBar } from 'react-native';
 import tabstyle from '../styles';
 import { Avatar, COLOR, ThemeProvider, Button } from 'react-native-material-ui';
-import Container from '../Container';
+import {inject, observer} from "mobx-react/native";
 import { StackNavigator } from 'react-navigation';
 import SocketIOClient from 'socket.io-client';
 import Chipper from './Chipper';
 var axios = require('axios');
 
+@inject('store') @observer
 export default class Coffee extends React.Component {
   static navigationOptions = {
     title: "Coffee",
@@ -32,7 +33,7 @@ export default class Coffee extends React.Component {
       this.endBrew = this.endBrew.bind(this)
       this.socket;
       this.state = {
-        clock: false
+        clock: false,
       }
     }
 
@@ -53,14 +54,11 @@ export default class Coffee extends React.Component {
     }
 
     addCup(){
-      let thisCount = this.props.screenProps.store.user.userCupcount;
-      console.log(thisCount)
-      console.log('thisCount')
-      if (thisCount <= 11) {
-        console.log('blerrrstterrrrff')
-      thisCount = thisCount + 1;
+      console.log('PEW PEW PEW PEW PEW PEW PEW')
+      if (this.props.store.user.userCupcount <= 11) {
+      this.props.store.user.userCupcount = this.props.store.user.userCupcount + 1;
       this.socket.emit('/postcup', {
-        cupcount: thisCount,
+        cupcount: this.props.store.user.userCupcount,
         userid: this.props.screenProps.store.user.id
         })
       } else {
@@ -74,7 +72,7 @@ export default class Coffee extends React.Component {
         this.socket = SocketIOClient(socketUrl)
         this.socket.emit('coffeeConnect', res)
         this.socket.on('postedCup', (data) => {
-          console.log('fuck fuck fuck fuck fuk')
+          console.log('FLARK FLARK FLARK FLARK FLARK')
           let sample = data;
           if (sample) {
             Array.prototype.sum = function (prop) {
@@ -85,29 +83,15 @@ export default class Coffee extends React.Component {
               return total
             }
             let totalCupcount = sample.sum(`cupcount`);
-            console.log(totalCupcount)
-            console.log('shit fuck damn')
-            console.log(this.props.screenProps.store.user.totalCount)
-            console.log('what a lovely string')
-            let storeCount = this.props.screenProps.store.user.totalCount;
-            console.log(storeCount)
-            if (storeCount == null) {
-              storeCount = 0;
-              console.log('iffer')
-              console.log(storeCount)
-            } else if (storeCount <= 12) {
-            storeCount = totalCupcount;
-            console.log('else iffer')
-            console.log(storeCount)
+            if (this.props.store.user.totalCount <= 12) {
+            this.props.store.user.totalCount = totalCupcount;
             } else {
-              storeCount = 12;
+              this.props.store.user.totalCount = 12;
               alert('Coffee pot at capacity!');
-              console.log('elser')
-              console.log(storeCount)
             }
-      //      this.props.screenProps.store.user = data;
+            this.props.store.user.users = data            
           } else {
-            this.props.screenProps.store.user = [];
+            this.props.store.user = [];
           }
           })
       })
@@ -127,7 +111,7 @@ export default class Coffee extends React.Component {
                       text="Add Cup"
                     />
                   </View>
-                  <Chipper info={this.props.screenProps.store.user}/>
+                  <Chipper/>
                   <View style={styles.buttonBottom} >
                     <Button raised secondary
                       onPress={this.startBrew}

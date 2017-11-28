@@ -3,7 +3,6 @@ import { StyleSheet, TouchableOpacity, Image, Text, TextInput } from 'react-nati
 import tabstyle from '../styles';
 import { COLOR, ThemeProvider, Button } from 'react-native-material-ui';
 import Container from '../Container';
-
 import { StackNavigator } from 'react-navigation';
 var axios = require('axios');
 
