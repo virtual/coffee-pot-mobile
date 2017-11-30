@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity, Image, Text, TextInput, View, StatusBar } from 'react-native';
 import tabstyle from '../styles';
-import { Subheader, Divider, COLOR, ThemeProvider, Button } from 'react-native-material-ui';
+import { Subheader, Divider, COLOR, ThemeProvider, Button, Avatar, Badge } from 'react-native-material-ui';
 import {inject, observer} from "mobx-react/native";
 import Container from '../Container';
 import { StackNavigator } from 'react-navigation';
@@ -32,10 +32,28 @@ export default class Chipper extends React.Component {
 
   arrayBlaster(data, i) {
     if (data) {
+      console.log("img")
+      //let img = (data.image !== undefined) ? data.image : 'https://coffee-pot-pi.herokuapp.com/images/default.png'
+      let img = 'https://coffee-pot-pi.herokuapp.com/images/default.png'
+      if (data.image  !== 'undefined') { img = data.image; } 
+      console.log(img);
        return (
-          <View style={styles.avatarRow} key={i}>
-          <Text>{data.firstname}: </Text>
-          <Text>{data.cupcount}</Text>
+         <View>
+           <View style={{ paddingBottom: 20}}>
+               <Image 
+               style={{width: 50, height: 50}}
+               source={{uri: img}} 
+               alt={data.firstname}
+               >
+               </Image>
+               <Badge
+             size={24}
+             text={data.cupcount}
+             style={{ container: { bottom: -8, right: -12 } }}
+           />
+ </View>
+          
+           
           </View>
         )
     } else {
