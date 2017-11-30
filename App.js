@@ -1,10 +1,12 @@
 import React from 'react';
 import { AppRegistry, StyleSheet, Text, View } from 'react-native'; 
 import { COLOR, ThemeProvider, Button } from 'react-native-material-ui';
+import { Provider } from 'mobx-react/native';
 import Main from './screens/Main';
 import Login from './screens/Login';
 import Signup from './screens/Signup';
 import Coffee from './screens/Coffee';
+import Chipper from './screens/Chipper';
 import Loading from './screens/Loading';
 import { StackNavigator } from 'react-navigation';
 import UserStore from './stores/UserStore'
@@ -14,17 +16,20 @@ const SimpleApp = StackNavigator({
   Main: { screen: Main },
   Signup: { screen: Signup },
   Login: { screen: Login },
-  Loading: { screen: Loading }
+  Loading: { screen: Loading },
+  Coffee: { screen: Coffee },
+  Chipper: { screen: Chipper }
 });
  
 export default class App extends React.Component {  
   
   render() {
-    console.log(UserStore.user.firstName);
     return (
-      <ThemeProvider uiTheme={uiTheme}>
-         <SimpleApp screenProps={{ store: UserStore }} />
-      </ThemeProvider>
+      <Provider store={UserStore}>
+        <ThemeProvider uiTheme={uiTheme} store={{store: UserStore}}>
+          <SimpleApp screenProps={{ store: UserStore }} />
+        </ThemeProvider>
+      </Provider>
     );
   }
 }

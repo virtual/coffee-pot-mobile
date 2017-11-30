@@ -26,114 +26,15 @@ export default class Main extends Component {
 
 constructor(){
   super()
-    this.addCup = this.addCup.bind(this)
-    this.startBrew = this.startBrew.bind(this)
-    this.endBrew = this.endBrew.bind(this)
     this.socket;
     this.state = {
       clock: false
     }
   }
 
-  startBrew(){
-    this.socket.emit('/startBrew')
-    this.props.user.userCupcount = 0;
-    this.setState({
-      clock: true
-    })
-  }
-
-  endBrew(){
-    // console.log('ending brew')
-    this.socket.emit('/endBrew');
-    this.setState({
-      clock: false
-    })
-  }
-
-  addCup(){
-    console.log('addddd cccuuuppppp')
-    console.log(this.props.screenProps.store.user.userCupcount); 
-    let thisCount = this.props.screenProps.store.user.userCupcount;
-    if (thisCount <= 11) {
-    thisCount = thisCount + 1;
-    this.socket.emit('/postcup', {
-      cupcount: thisCount,
-      userid: this.props.screenProps.store.user.id
-      })
-    } else {
-      alert('Coffee pot at capacity!')
-    }
-  } 
-
-  componentDidMount(){
-    axios.post('http://192.168.1.14:5000/socketUrl').then((res) => {
-      console.log(res.data)
-      console.log('^^^ DID MOUNT)')
-      var socketUrl = res.data;
-      this.socket = SocketIOClient(socketUrl)
-      this.socket.emit('coffeeConnect', res)
-      this.socket.on('postedCup', (data) => {
-        let sample = data;
-        if (sample) {
-          Array.prototype.sum = function (prop) {
-            let total = 0;
-            for (let i = 0, _len = this.length; i < _len; i++) {
-              total +=this[i][prop]
-            }
-            return total
-          }
-
-          let totalCupcount = sample.sum(`cupcount`);
-          if (this.props.user.totalCount <= 12) {
-          this.props.user.totalCount = totalCupcount;
-          } else {
-            this.props.user.totalCount = 12;
-            alert('Coffee pot at capacity!');
-          }
-          this.props.user.users = data;
-        } else {
-          this.props.user.users = [];
-        }
-        })
-    })
-  }
 
   render() {
-    let user = this.props.screenProps.store.user
     const { navigate } = this.props.navigation;    
-        if (this.props.screenProps.store.user.firstName && this.state.clock == false) {
-    return (
-      <View style={styles.contentContainer}>
-            <Image source={require('../images/main-background.jpg')} style={styles.jumbotron}>
-              <View style={{ flex: 1 }}>
-                <View style={styles.footer}>
-                  <View style={styles.buttonTop} >
-                    <Button raised primary
-                      onPress={this.addCup}
-                      title="Add Cup"
-                      text="Add Cup"
-                    />
-                  </View>
-                  <View style={styles.buttonBottom} >
-                    <Button raised secondary
-                      onPress={this.startBrew}
-                      title="Start Brew"
-                      text="Start Brew"
-                    />
-                  </View>
-                </View>
-              </View>
-            </Image>
-        </View>
-    )} else if (this.props.screenProps.store.user.firstName && this.state.clock == true) {
-      return (
-        <View style={styles.contentContainer}>
-            <Image source={require('../images/main-background.jpg')} style={styles.jumbotron}>
-          <Loading />
-          </Image>
-        </View>
-      )} else {
       return(
           <View style={styles.contentContainer}>
 
@@ -157,21 +58,13 @@ constructor(){
                       text="Login"
                     />
                   </View>
-                  <View>
-                  <Text style={styles.debug}>
-                  STORE VAL: {this.props.screenProps.store.user.firstName} / / 
-
-                  Debug with json.stringify  :D
-                  </Text>
-                  </View>
                 </View>
               </View>
-              <Text style={{ color: '#fff' }}>Solving - the problem of how much coffee to make</Text>
+              {/* <Text style={{ color: '#fff' }}>Solving - the problem of how much coffee to make</Text> */}
             </Image>
         </View>
       )
     }
-  }
 }
 
 const styles = StyleSheet.create({
@@ -188,8 +81,7 @@ const styles = StyleSheet.create({
   footer: {
     padding: 24,
     flex: 1,
-  }
-  ,
+  },
   buttonBottom: {
     paddingBottom: 16
   },

@@ -12,7 +12,7 @@ export default class Main extends Component {
           <View style={styles.svgSm}>
           <CoffeePot fillColor="#fff" />
           </View>
-          <Text style={styles.status}>0% complete</Text>
+          <Text style={styles.status}>Brewing!</Text>
         </View>
     );
   }

@@ -86,6 +86,7 @@ passport.deserializeUser((id, done) => {
       let query = `SELECT users.firstname, users.image, history.cupcount, users.id, history.status FROM users INNER JOIN history ON users.id = history.userid WHERE history.status = 0`;
       pool.query(query, (err, rows) => {
         data = rows.rows;
+        console.log('coffee emitter')
         ioServer.in(rows).emit('postedCup', data);
       })
     }
@@ -95,6 +96,7 @@ passport.deserializeUser((id, done) => {
     });
 
     client.on('/postcup', (data) => {
+      console.log('aye aye cap"n')
       let checkUserCt = `SELECT * FROM history WHERE userid = ${data.userid} AND status = 0`;
       pool.query(checkUserCt, (err, rows)=>{
         // if user in current brew state
@@ -160,6 +162,7 @@ passport.deserializeUser((id, done) => {
               pool.query(userQuery, (error, users) => {
                 if (error) throw error;
                 theseUsers = users.rows;
+                console.log(theseUsers)
                 res.json({ 
                   users: theseUsers,
                   found: true, 
@@ -189,8 +192,7 @@ app.post('/socketUrl', (req, res)=>{
     console.log('ooonnneee')
     res.json('https://coffee-pot-pi.herokuapp.com:');
   } else {
-    console.log('orrr ttttwwwooo')
-    res.json('192.168.1.14:5000')
+    res.json('http://localhost:5000')
   }
 });
 

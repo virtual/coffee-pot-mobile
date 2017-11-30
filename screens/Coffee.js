@@ -1,11 +1,15 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity, Image, Text, TextInput, View, StatusBar } from 'react-native';
 import tabstyle from '../styles';
-import { COLOR, ThemeProvider, Button } from 'react-native-material-ui';
-import Container from '../Container';
+import { Avatar, COLOR, ThemeProvider, Button } from 'react-native-material-ui';
+import {inject, observer} from "mobx-react/native";
 import { StackNavigator } from 'react-navigation';
+import SocketIOClient from 'socket.io-client';
+import Chipper from './Chipper';
+import Loading from './Loading';
 var axios = require('axios');
 
+@inject('store') @observer
 export default class Coffee extends React.Component {
   static navigationOptions = {
     title: "Coffee",
@@ -30,33 +34,29 @@ export default class Coffee extends React.Component {
       this.endBrew = this.endBrew.bind(this)
       this.socket;
       this.state = {
-        clock: false
+        clock: false,
       }
     }
 
+
     startBrew(){
       this.socket.emit('/startBrew')
-      this.props.user.userCupcount = 0;
-      this.setState({
-        clock: true
-      })
+      this.props.store.user.userCupcount = 0;
     }
-  
+
     endBrew(){
-      // console.log('ending brew')
       this.socket.emit('/endBrew');
-      
       this.setState({
         clock: false
       })
     }
-  
+
     addCup(){
-      if (this.props.user.userCupcount <= 11) {
-      this.props.user.userCupcount = this.props.user.userCupcount + 1;
+      if (this.props.store.user.userCupcount <= 11) {
+      this.props.store.user.userCupcount = this.props.store.user.userCupcount + 1;
       this.socket.emit('/postcup', {
-        cupcount: this.props.user.userCupcount,
-        userid: this.props.user.id
+        cupcount: this.props.store.user.userCupcount,
+        userid: this.props.screenProps.store.user.id
         })
       } else {
         alert('Coffee pot at capacity!')
@@ -64,13 +64,17 @@ export default class Coffee extends React.Component {
     } 
 
     componentDidMount(){
-      axios.post('http://192.168.1.14:5000/socketUrl').then((res) => {
+      axios.post('http://localhost:5000/socketUrl').then((res) => {
         var socketUrl = res.data;
-        this.socket = openSocket(socketUrl)
+        this.socket = SocketIOClient(socketUrl)
         this.socket.emit('coffeeConnect', res)
         this.socket.on('postedCup', (data) => {
-          // console.log("postedCup+++++")
-          // console.log(this.props.userStore);
+          console.log(data)
+          if (data.length == 0) {
+            this.setState({
+              clock: true
+            })
+          }
           let sample = data;
           if (sample) {
             Array.prototype.sum = function (prop) {
@@ -80,105 +84,119 @@ export default class Coffee extends React.Component {
               }
               return total
             }
-  
             let totalCupcount = sample.sum(`cupcount`);
-            if (this.props.user.totalCount <= 12) {
-            this.props.user.totalCount = totalCupcount;
+            if (this.props.store.user.totalCount <= 12) {
+            this.props.store.user.totalCount = totalCupcount;
             } else {
-              this.props.user.totalCount = 12;
+              this.props.store.user.totalCount = 12;
               alert('Coffee pot at capacity!');
             }
-            this.props.user.users = data;
+            this.props.store.user.users = data            
           } else {
-            this.props.user.users = [];
+            this.props.store.user = [];
           }
           })
       })
     }
 
     render() {
-      const currentDate = new Date();
-      const year = (currentDate.getMonth() === 11 && currentDate.getDate() > 23) ? currentDate.getFullYear() + 1 : currentDate.getFullYear();
-      if (this.props.user && this.state.clock == false) {
-        // console.log('wahoo')
+      if (this.props.screenProps.store.user && this.state.clock == false) {
       return (
-        <View>
-          <Button onClick={this.addCup}>Add a cup!
-          </Button>
-          <Text>All People who want coffee: calls USERS</Text>
-          
-          <Button onClick={this.startBrew}>Start Brew</Button>
-        </View>
-      )} else if (this.props.user && this.state.clock == true) {
-        return (
-          <View>
-            <Text>Calls LOADING</Text>
-            <View className='sr-only'>
-            <Text> Calls COUNTDOWN</Text>
-           </View>
-          </View>
-        )} else {
-        return(
-          <View>
-            <View style={styles.jumbotron}>
-              <View style={styles.jumbotronText}>
-                <Text style={styles.jumbotronTextH1}>Coffee Pot Pi</Text>
-                <Text style={{ color: '#fff'}}>Solving the problem of how much coffee to make</Text>
+        <View style={styles.contentContainer}>
+            <Image source={require('../images/main-background.jpg')} style={styles.jumbotron}>
+              <View style={{ flex: 1 }}>
+                <View style={styles.footer}>
+                  <View style={styles.buttonTop} >
+                    <Button raised primary
+                      onPress={this.addCup}
+                      title="Add Cup"
+                      text="Add Cup"
+                    />
+                  </View>
+                  <Chipper/>
+                  <View style={styles.buttonBottom} >
+                    <Button raised secondary
+                      onPress={this.startBrew}
+                      title="Start Brew"
+                      text="Start Brew"
+                    />
+                  </View>
+                </View>
               </View>
-            </View> 
-  
-              <Text>Revolutionize your coffee process</Text>
-              <Text>Get your piece of the Coffee Pot "Pi"</Text>
+            </Image>
+        </View>
+      )} else if (this.props.store.user && this.state.clock == true) {
+        return (
+          <Image source={require('../images/main-background.jpg')} style={styles.jumbotron}>
+          <View style={{ flex: 1 }}>
+            <Loading />
           </View>
-        )
+          </Image>
+
+        )}
       }
     }
-  }
 
-const styles = StyleSheet.create({
-  
-  jumbotron: {
-    backgroundColor: "#333",
-    //backgroundImage: "url(https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1050&q=60&ixid=dW5zcGxhc2guY29tOzs7Ozs%3D)", 
-    //backgroundPosition: 'center', 
-    //backgroundRepeat: 'no-repeat',
-    //backgroundSize: 'cover', 
-  },
-  jumbotronText: {
-    // background: 'linear-gradient(to right, rgba(154, 132, 120, .5), rgba(30, 19, 12, .5))',  
-    position: 'absolute', 
-    width: '100%'
-  },
-  jumbotronTextH1: {fontSize: 24},
- message: {
-   textAlign: 'center',
-   padding: 8,
-   marginTop: 8,
-   fontStyle: 'italic'
- },
-  inputText:{
-    height: 40,   
-    borderColor: COLOR.brown100,
-    borderWidth: 1,
-    backgroundColor: 'white',
-    marginBottom: 8,
-    padding: 8
-  },
-  logo: {
-    textAlign: 'center',
-    fontSize: 20,
-    padding: 16
-  },
-  backgroundImage:{
-    flex: 1,
-    resizeMode: 'cover',
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  titles:{
-    backgroundColor: 'rgba(52, 52, 52, 0.0)'
-  },
-  loginButton:{
-    marginTop: 5 
-  }
-});
+    const styles = StyleSheet.create({
+      debug: { backgroundColor: '#ccc', padding: 3 },
+      container: {
+        flex: 1,
+        //backgroundColor: '#F5FCFF',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+      },
+      contentContainer: {
+        flex: 1, // pushes the footer to the end of the screen
+      },
+      footer: {
+        padding: 24,
+        flex: 1,
+      },
+      buttonBottom: {
+        paddingBottom: 16
+      },
+      buttonTop: {
+        paddingTop: 16,
+        paddingBottom: 320
+      },
+      jumbotron: {
+        width: '100%',
+        padding: 10
+      },
+      jumbotronText: {
+        width: '100%'
+      },
+      jumbotronTextH1: { fontSize: 24, color: "#fff" },
+      message: {
+        textAlign: 'center',
+        padding: 8,
+        marginTop: 8,
+        fontStyle: 'italic'
+      },
+      inputText: {
+        height: 40,
+        borderColor: COLOR.brown100,
+        borderWidth: 1,
+        backgroundColor: 'white',
+        marginBottom: 8,
+        padding: 8
+      },
+      logoImg: {
+        flex: 1, resizeMode: "stretch", width: null, height: null
+      },
+      logo: {
+        flexDirection: "row", flex: 1
+      },
+      backgroundImage: {
+        flex: 1,
+        resizeMode: 'cover',
+        justifyContent: 'center',
+        alignItems: 'center'
+      },
+      titles: {
+        backgroundColor: 'rgba(52, 52, 52, 0.0)'
+      },
+      loginButton: {
+        marginTop: 5
+      }
+    });
