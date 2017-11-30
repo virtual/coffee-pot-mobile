@@ -6,6 +6,7 @@ import {inject, observer} from "mobx-react/native";
 import { StackNavigator } from 'react-navigation';
 import SocketIOClient from 'socket.io-client';
 import Chipper from './Chipper';
+import Loading from './Loading';
 var axios = require('axios');
 
 @inject('store') @observer
@@ -40,10 +41,7 @@ export default class Coffee extends React.Component {
 
     startBrew(){
       this.socket.emit('/startBrew')
-      this.props.user.userCupcount = 0;
-      this.setState({
-        clock: true
-      })
+      this.props.store.user.userCupcount = 0;
     }
 
     endBrew(){
@@ -54,7 +52,6 @@ export default class Coffee extends React.Component {
     }
 
     addCup(){
-      console.log('PEW PEW PEW PEW PEW PEW PEW')
       if (this.props.store.user.userCupcount <= 11) {
       this.props.store.user.userCupcount = this.props.store.user.userCupcount + 1;
       this.socket.emit('/postcup', {
@@ -72,7 +69,12 @@ export default class Coffee extends React.Component {
         this.socket = SocketIOClient(socketUrl)
         this.socket.emit('coffeeConnect', res)
         this.socket.on('postedCup', (data) => {
-          console.log('FLARK FLARK FLARK FLARK FLARK')
+          console.log(data)
+          if (data.length == 0) {
+            this.setState({
+              clock: true
+            })
+          }
           let sample = data;
           if (sample) {
             Array.prototype.sum = function (prop) {
@@ -123,14 +125,14 @@ export default class Coffee extends React.Component {
               </View>
             </Image>
         </View>
-      )} else if (this.props.screenProps.store.user && this.state.clock == true) {
+      )} else if (this.props.store.user && this.state.clock == true) {
         return (
-          <View>
-            <Text>Calls LOADING</Text>
-            <View className='sr-only'>
-            <Text> Calls COUNTDOWN</Text>
-           </View>
+          <Image source={require('../images/main-background.jpg')} style={styles.jumbotron}>
+          <View style={{ flex: 1 }}>
+            <Loading />
           </View>
+          </Image>
+
         )}
       }
     }
