@@ -86,8 +86,12 @@ passport.deserializeUser((id, done) => {
       let query = `SELECT users.firstname, users.image, history.cupcount, users.id, history.status FROM users INNER JOIN history ON users.id = history.userid WHERE history.status = 0`;
       pool.query(query, (err, rows) => {
         data = rows.rows;
-        console.log('coffee emitter')
-        ioServer.in(rows).emit('postedCup', data);
+        ioServer.emit('postedCup', data);
+        let totalQuery = `select sum(cupcount) from history where status = 0;`;
+        pool.query(totalQuery, (err, rows) => {
+          let sum = rows.rows[0].sum
+          ioServer.emit('cupToPi', sum);
+        })
       })
     }
 
@@ -126,10 +130,11 @@ passport.deserializeUser((id, done) => {
       let startQuery = `UPDATE history SET status = 2 WHERE status = 1`;
       pool.query(startQuery, (err, rows) => {
         if (err) throw err;
-          ioServer.in(rows).emit('postedCup', rows.data);
+          //ioServer.in(rows).emit('postedCup', rows.data);
+          ioServer.emit('cupToPi', 0);
       })
     })
-
+    
     client.on('disconnect', ()=>{console.log("client disconnected")});
   });
 
