@@ -153,11 +153,14 @@ export default class Coffee extends React.Component {
         flex: 1,
       },
       buttonBottom: {
-        paddingBottom: 16
+        paddingBottom: 16,
+        flex: 1,
+        justifyContent: 'flex-end'
       },
       buttonTop: {
         paddingTop: 16,
-        paddingBottom: 320
+        paddingBottom: 320,
+        flex: 1
       },
       jumbotron: {
         width: '100%',

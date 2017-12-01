@@ -38,7 +38,7 @@ export default class Chipper extends React.Component {
       if (data.image  !== 'undefined') { img = data.image; } 
       console.log(img);
        return (
-         <View style={{width:'100%'
+         <View key={'chipper'+i} style={{width:'100%'
   }}>
           
            <View style={{ 
@@ -53,7 +53,7 @@ export default class Chipper extends React.Component {
                </Image>
                <Badge
              size={24}
-             text={data.cupcount}
+             text={''+data.cupcount}
              style={{ container: { bottom: -8, right: -12 } }}
            />
            </View>
