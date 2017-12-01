@@ -7,7 +7,7 @@ class ObservableUserStore {
   @observable user = {
     
   }
-  @observable message = 'here';
+  @observable message = '';
  
 
   @observable submitLogin(a, b) {

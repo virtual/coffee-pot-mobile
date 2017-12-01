@@ -12,7 +12,7 @@ export default class Main extends Component {
           <View style={styles.svgSm}>
           <CoffeePot fillColor="#fff" />
           </View>
-          <Text style={styles.status}>Brewing!</Text>
+          <Text style={styles.status}>Brewing...</Text>
         </View>
     );
   }
@@ -29,6 +29,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 20, 
     flex: 1,
-    color: '#fff'
+    color: '#fff',
+    backgroundColor: 'transparent'
   }
 });

@@ -1,7 +1,7 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity, Image, Text, TextInput, View, StatusBar } from 'react-native';
+import { StyleSheet, TouchableOpacity, Image, Text, TextInput, View, StatusBar, FlatList } from 'react-native';
 import tabstyle from '../styles';
-import { Subheader, Divider, COLOR, ThemeProvider, Button } from 'react-native-material-ui';
+import { Subheader, ListItem, Divider, COLOR, ThemeProvider, Button, Avatar, Badge } from 'react-native-material-ui';
 import {inject, observer} from "mobx-react/native";
 import Container from '../Container';
 import { StackNavigator } from 'react-navigation';
@@ -32,10 +32,37 @@ export default class Chipper extends React.Component {
 
   arrayBlaster(data, i) {
     if (data) {
+      console.log("img")
+      //let img = (data.image !== undefined) ? data.image : 'https://coffee-pot-pi.herokuapp.com/images/default.png'
+      let img = 'https://coffee-pot-pi.herokuapp.com/images/default.png'
+      if (data.image  !== 'undefined') { img = data.image; } 
+      console.log(img);
        return (
-          <View style={styles.avatarRow} key={i}>
-          <Text>{data.firstname}: </Text>
-          <Text>{data.cupcount}</Text>
+         <View style={{width:'100%'
+  }}>
+          
+           <View style={{ 
+    backgroundColor: 'rgba(0,0,0,.3)',
+    width: '100%', marginBottom: 10, padding: 10,  justifyContent: 'flex-start', display: 'flex', flexDirection: 'row', alignItems: 'center', }}>
+              <View >
+               <Image 
+               style={{width: 50, height: 50}}
+               source={{uri: img}} 
+               alt={data.firstname}
+               >
+               </Image>
+               <Badge
+             size={24}
+             text={data.cupcount}
+             style={{ container: { bottom: -8, right: -12 } }}
+           />
+           </View>
+           <View style={{paddingLeft: 12}}>
+             <Text style={{fontWeight: 'bold', color: "#fff"}}>{data.firstname}</Text>
+           </View>
+ </View>
+          
+           
           </View>
         )
     } else {
@@ -53,9 +80,9 @@ export default class Chipper extends React.Component {
     let masterBlaster = this.props.store.user.users;
     return (
       <View style={styles.avatarColumn}>
-        {masterBlaster.map(this.arrayBlaster, this)}
+          {masterBlaster.map(this.arrayBlaster, this)}
       <View style={styles.avatarRow}>
-        <Text>Total: </Text><Text>{nullifier}</Text>
+        <Text style={{ backgroundColor: 'rgba(255,255,255,.6)', padding: 5, paddingLeft:8, paddingRight: 8,    fontWeight: 'bold', color: COLOR.teal800, fontSize: 20}}>Total:  {nullifier}</Text>
       </View>
       </View>
 
@@ -65,16 +92,18 @@ export default class Chipper extends React.Component {
 
 const styles = StyleSheet.create({
   avatarColumn: {
+    display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 16
+    justifyContent: 'flex-start',
+    paddingHorizontal: 16,
+    marginTop: 20
   },
   avatarRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 16
+    padding: 10,
   },
   message: {
     textAlign: 'center',

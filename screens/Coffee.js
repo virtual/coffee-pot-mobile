@@ -108,8 +108,8 @@ export default class Coffee extends React.Component {
                       title="Add Cup"
                       text="Add Cup"
                     />
-                  </View>
                   <Chipper/>
+                  </View>
                   <View style={styles.buttonBottom} >
                     <Button raised secondary
                       onPress={this.startBrew}
