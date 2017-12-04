@@ -46,7 +46,6 @@ export default class Coffee extends React.Component {
     }
 
     endBrew(){
-      console.log('chickenfrigger')
       this.socket.emit('/endBrew');
       this.setState({
         clock: false
@@ -54,6 +53,7 @@ export default class Coffee extends React.Component {
     }
 
     addCup(){
+      console.log(this.props.store.user.userCupcount)
       if (this.props.store.user.userCupcount <= 11) {
       this.props.store.user.userCupcount = this.props.store.user.userCupcount + 1;
       this.socket.emit('/postcup', {
@@ -66,12 +66,13 @@ export default class Coffee extends React.Component {
     } 
 
     componentDidMount(){
-      axios.post('http://coffee-pot-pi.herokuapp.com/socketUrl').then((res) => {
+      axios.post('http://localhost:5000/socketUrl').then((res) => {
         var socketUrl = res.data;
         this.socket = SocketIOClient(socketUrl)
         this.socket.emit('coffeeConnect', res)
         this.socket.on('postedCup', (data) => {
           if (data.length == 0) {
+            this.props.store.user.userCupcount = 0;
             this.setState({
               clock: true
             })
@@ -128,7 +129,6 @@ export default class Coffee extends React.Component {
             <Loading />
             <TimerCountdown
             initialSecondsRemaining={10000}
-            onTick={() => console.log('tick')}
             onTimeElapsed={() => this.endBrew()}
             />
           </View>

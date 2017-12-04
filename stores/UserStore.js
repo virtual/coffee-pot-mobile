@@ -12,7 +12,7 @@ class ObservableUserStore {
 
   @observable submitLogin(a, b) {
     return new Promise((resolve, reject)=>{
-      axios.post('http://coffee-pot-pi.herokuapp.com/login', {
+      axios.post('http://localhost:5000/login', {
             username: a,
             password: b,
     }).then((res) => {
