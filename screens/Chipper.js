@@ -32,11 +32,9 @@ export default class Chipper extends React.Component {
 
   arrayBlaster(data, i) {
     if (data) {
-      console.log("img")
       //let img = (data.image !== undefined) ? data.image : 'https://coffee-pot-pi.herokuapp.com/images/default.png'
       let img = 'https://coffee-pot-pi.herokuapp.com/images/default.png'
       if (data.image  !== 'undefined') { img = data.image; } 
-      console.log(img);
        return (
          <View key={'chipper'+i} style={{width:'100%'
   }}>

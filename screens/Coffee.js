@@ -5,6 +5,7 @@ import { Avatar, COLOR, ThemeProvider, Button } from 'react-native-material-ui';
 import {inject, observer} from "mobx-react/native";
 import { StackNavigator } from 'react-navigation';
 import SocketIOClient from 'socket.io-client';
+import TimerCountdown from 'react-native-timer-countdown'
 import Chipper from './Chipper';
 import Loading from './Loading';
 var axios = require('axios');
@@ -52,6 +53,7 @@ export default class Coffee extends React.Component {
     }
 
     addCup(){
+      console.log(this.props.store.user.userCupcount)
       if (this.props.store.user.userCupcount <= 11) {
       this.props.store.user.userCupcount = this.props.store.user.userCupcount + 1;
       this.socket.emit('/postcup', {
@@ -69,14 +71,13 @@ export default class Coffee extends React.Component {
         this.socket = SocketIOClient(socketUrl)
         this.socket.emit('coffeeConnect', res)
         this.socket.on('postedCup', (data) => {
-          console.log(data)
           if (data.length == 0) {
+            this.props.store.user.userCupcount = 0;
             this.setState({
               clock: true
             })
           }
           let sample = data;
-          if (sample) {
             Array.prototype.sum = function (prop) {
               let total = 0;
               for (let i = 0, _len = this.length; i < _len; i++) {
@@ -89,12 +90,8 @@ export default class Coffee extends React.Component {
             this.props.store.user.totalCount = totalCupcount;
             } else {
               this.props.store.user.totalCount = 12;
-              alert('Coffee pot at capacity!');
             }
-            this.props.store.user.users = data            
-          } else {
-            this.props.store.user = [];
-          }
+            this.props.store.user.users = data
           })
       })
     }
@@ -130,6 +127,10 @@ export default class Coffee extends React.Component {
           <Image source={require('../images/main-background.jpg')} style={styles.jumbotron}>
           <View style={{ flex: 1 }}>
             <Loading />
+            <TimerCountdown
+            initialSecondsRemaining={10000}
+            onTimeElapsed={() => this.endBrew()}
+            />
           </View>
           </Image>
 

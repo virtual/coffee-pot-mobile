@@ -79,7 +79,6 @@ export default class Login extends React.Component {
         title='Login'
         text="Login"
         onPress={() => this.handleLogin()} />
-        <Text style={styles.message}>{ this.props.screenProps.store.message }</Text>
      </Container>
     )
   }

@@ -1,4 +1,5 @@
 var express = require('express');
+var http = require('http');
 var app = require("express")();
 var server = require('http').Server(app);
 var io = require('socket.io');
@@ -9,7 +10,6 @@ var passport = require("passport");
 var LocalStrategy = require("passport-local").Strategy;
 var passwordHash = require("password-hash");
 var cookieParser = require('cookie-parser');
-var http = require('http');
 var path  = require('path');
 const { Pool } = require('pg');
 const AWS = require('aws-sdk');
@@ -39,11 +39,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(expressSession({ secret: "moby" }));
 app.use(passport.initialize());
 app.use(passport.session());
-// if (process.env.NODE_ENV === 'production') {
-//   app.use(express.static('./client/build'));
-// } else {
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static('./client/build'));
+} else {
   app.use(express.static('public'));
-// }
+}
 
 // needs to be called username 
 passport.use(new LocalStrategy({email: 'username', password: 'password'},
@@ -80,23 +80,32 @@ passport.deserializeUser((id, done) => {
   })
 
   ioServer.on('connection', (client) => {
-    console.log('client connected')
+    console.log('client connected! id: ', client.id)
 
     function getCurrentCoffee() {
       let query = `SELECT users.firstname, users.image, history.cupcount, users.id, history.status FROM users INNER JOIN history ON users.id = history.userid WHERE history.status = 0`;
       pool.query(query, (err, rows) => {
         data = rows.rows;
-        console.log('coffee emitter')
-        ioServer.in(rows).emit('postedCup', data);
+        ioServer.emit('postedCup', data);
+        let totalQuery = `select sum(cupcount) from history where status = 0;`;
+        pool.query(totalQuery, (err, rows) => {
+          let sum = rows.rows[0].sum
+          ioServer.emit('cupToPi', sum);
+        })
       })
     }
+
+    client.on('piDisconnected', ()=>{
+      console.log(':)')
+    });
+
+
 
     client.on('coffeeConnect', (coffee) => {
       client.join(coffee);
     });
 
     client.on('/postcup', (data) => {
-      console.log('aye aye cap"n')
       let checkUserCt = `SELECT * FROM history WHERE userid = ${data.userid} AND status = 0`;
       pool.query(checkUserCt, (err, rows)=>{
         // if user in current brew state
@@ -126,7 +135,7 @@ passport.deserializeUser((id, done) => {
       let startQuery = `UPDATE history SET status = 2 WHERE status = 1`;
       pool.query(startQuery, (err, rows) => {
         if (err) throw err;
-          ioServer.in(rows).emit('postedCup', rows.data);
+          ioServer.emit('cupToPi', 0);
       })
     })
 
@@ -162,14 +171,13 @@ passport.deserializeUser((id, done) => {
               pool.query(userQuery, (error, users) => {
                 if (error) throw error;
                 theseUsers = users.rows;
-                console.log(theseUsers)
                 res.json({ 
                   users: theseUsers,
                   found: true, 
                   success: true, 
-                  message: 'Welcome ' + user.firstname,
                   id: user.id, 
                   totalCount: sum, 
+                  image: user.image,
                   userCupcount: userCupcount, 
                   email: user.email, 
                   firstName: user.firstname, 
@@ -180,7 +188,7 @@ passport.deserializeUser((id, done) => {
         }
       })
     } else {
-      res.json({ found: false, success: false, message: "Username and Password are incorrect." })
+      res.json({ found: false, success: false, message: "Something went wrong!" })
     }
   })(req, res, next);
   var email = req.body.email;
@@ -189,7 +197,6 @@ passport.deserializeUser((id, done) => {
 
 app.post('/socketUrl', (req, res)=>{
   if (process.env.PORT){
-    console.log('ooonnneee')
     res.json('https://coffee-pot-pi.herokuapp.com:');
   } else {
     res.json('http://localhost:5000')
@@ -239,30 +246,35 @@ const S3_BUCKET = process.env.S3_BUCKET;
       res.end();
     });
   } else {
-    console.log('invalid file type')
+
     res.end();
   }
 });
 
 app.post('/signup', (req, res, next) => {
-  console.log(req.body)
-  console.log("password: " + passwordHash.generate(req.body.password));
-  let checkEmail = `SELECT FROM users WHERE email = '${req.body.email}'`;
-  console.log(checkEmail)
-  pool.query(checkEmail, (err, result) => {
-    if (result.rowCount > 0) {
-      res.json({message: 'An account is already associated with that email address.'})
-    } else {
-      let query = `INSERT INTO users (firstname, lastname, email, password, image) values ('${req.body.firstName}', '${req.body.lastName}', '${req.body.email}', '${passwordHash.generate(req.body.password)}', '${req.body.image}') RETURNING id, firstname, lastname, email, id, image`  
-      pool.query(query, (err, user) => {
-        // console.log(query)
-        
-      if (err) throw err;
-        res.json(user.rows);
-      });    
-    }
-  })
-  
+  let query = `INSERT INTO users (firstname, lastname, email, password, image) values ('${req.body.firstName}', '${req.body.lastName}', '${req.body.email}', '${passwordHash.generate(req.body.password)}', '${req.body.image}') RETURNING id, firstname, lastname, email, id, image`  
+  pool.query(query, (err, user) => {
+
+    
+  if (err) throw err;
+    res.json(user.rows);
+  });    
+});
+
+app.get('/history', (req, res, next) => {
+  let query = `SELECT users.id, users.firstname, users.lastname, history.cupcount, history.added_at, users.image FROM history  INNER JOIN users ON users.id = history.userid WHERE status = 2 AND DATE_PART('day', NOW() - added_at) < 1 ORDER BY added_at DESC`  
+  pool.query(query, (err, users) => {
+    if (err) throw err;
+    res.json(users.rows);
+  });    
+});
+
+app.post('/history', (req, res, next) => {
+  let query = `SELECT users.id, users.firstname, users.lastname, history.cupcount, history.added_at, users.image FROM history  INNER JOIN users ON users.id = history.userid WHERE status = 2 AND users.id = ${req.body.userid} ORDER BY added_at DESC`  
+  pool.query(query, (err, users) => {
+    if (err) throw err;
+    res.json(users.rows);
+  });    
 });
 
 app.post('/logout', (req, res) => {
@@ -271,12 +283,11 @@ app.post('/logout', (req, res) => {
   res.redirect('/');
 });
 
-// app.get("/*", function(req, res) {
-//   res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
-// });
+app.get("/*", function(req, res) {
+  res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
+});
 
 var port = process.env.PORT || 5000;
 server.listen(port, () => {
-  var host = server.address().address; host = (host === '::')? 'localhost':host;
-  console.log('listening on port ' + port + ' ' + host  );
+  console.log('listening on port ' + port);
 });    
