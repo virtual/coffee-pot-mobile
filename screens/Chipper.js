@@ -36,7 +36,7 @@ export default class Chipper extends React.Component {
       let img = 'https://coffee-pot-pi.herokuapp.com/images/default.png'
       if (data.image  !== 'undefined') { img = data.image; } 
        return (
-         <View style={{width:'100%'
+         <View key={'chipper'+i} style={{width:'100%'
   }}>
           
            <View style={{ 
@@ -51,7 +51,7 @@ export default class Chipper extends React.Component {
                </Image>
                <Badge
              size={24}
-             text={data.cupcount}
+             text={''+data.cupcount}
              style={{ container: { bottom: -8, right: -12 } }}
            />
            </View>
