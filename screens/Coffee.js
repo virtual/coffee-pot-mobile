@@ -66,7 +66,7 @@ export default class Coffee extends React.Component {
     } 
 
     componentDidMount(){
-      axios.post('http://localhost:5000/socketUrl').then((res) => {
+      axios.post('https://coffee-pot-pi.herokuapp.com/socketUrl').then((res) => {
         var socketUrl = res.data;
         this.socket = SocketIOClient(socketUrl)
         this.socket.emit('coffeeConnect', res)

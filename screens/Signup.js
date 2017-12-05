@@ -96,7 +96,7 @@ export default class Signup extends React.Component {
 
   submitSignup(signupObj) {
     return new Promise((resolve, reject) => {
-      axios.post('http://localhost:5000/signup', {
+      axios.post('https://coffee-pot-pi.herokuapp.com/signup', {
         firstName: signupObj.firstName,
         lastName: signupObj.lastName,
         email: signupObj.email,
@@ -135,9 +135,8 @@ export default class Signup extends React.Component {
   render() {
     return (
       <Container>
-        <Text style={styles.logo}>Create an Account</Text>
-        <Text>Create an account to :
-          • track your coffee </Text>
+        <Text style={{textAlign:'center', color: COLOR.teal800, fontSize: 24, paddingBottom:8}}>Create an Account</Text>
+     
 
         <TextInput 
         autoFocus={true}

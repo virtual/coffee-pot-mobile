@@ -199,7 +199,7 @@ app.post('/socketUrl', (req, res)=>{
   if (process.env.PORT){
     res.json('https://coffee-pot-pi.herokuapp.com:');
   } else {
-    res.json('http://localhost:5000')
+    res.json('https://coffee-pot-pi.herokuapp.com')
   }
 });
 

@@ -63,7 +63,7 @@ export default class Login extends React.Component {
   render() {
     return (
       <Container>
-        <Text style={styles.logo}>Login with your email</Text>
+        <Text style={{textAlign:'center', color: COLOR.teal800, fontSize: 24, paddingBottom:8}}>Login with your email</Text>
         <TextInput style={styles.inputText}
         onChangeText={(text) => this.updateEmail(text)}
         placeholder="Email"        
